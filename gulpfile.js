@@ -12,10 +12,13 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
 gulp.task("clean", function() {
-    return gulp.src("./dest")
+    return gulp.src("./dest/**.*")
         .pipe(clean());
 });
-
+gulp.task('html', function() {
+    return gulp.src("./src/test/*.html")
+        .pipe(gulp.dest('./dest/html/'))
+});
 gulp.task('jsxTest', function() {
     return browserify({
             entries: './src/test/app.jsx',
@@ -40,6 +43,6 @@ gulp.task('uglifyTest', ['jsxTest'], function() {
         .pipe(gulp.dest('./dest/js/'))
 });
 gulp.task("watch", function() {
-    gulp.watch("./src/test/*.jsx", ["clean", "jsxTest"]);
+    gulp.watch("./src/test/**.*", ["clean", "html","uglifyTest"]);
 });
-gulp.task("default", ["clean", "uglifyTest"]);
+gulp.task("default", ["clean", "html","uglifyTest"]);
